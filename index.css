@@ -1,5 +1,5 @@
 body{
-    font-family: Arial, sans-serif;
+    font-family: 'Consolas', Arial, sans-serif;
     font-size: 12px;
     margin: 0;
 	background-image: url("niceone.jpg");
@@ -21,15 +21,31 @@ a:hover {
   color: rgba(0,0,0,.8);
 }
 
+.videotitle{
+	display: table-cell;
+	vertical-align: middle;
+}
+
 .videoimg{
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	/*test*/
-	padding-right: 20px;
     width: 100%;
+	margin-top: 5px;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.videodescimg{
+	float: left;
+	margin: 5px 5px 0px 0px;
+	position: relative;
+    height: 15%;
+	width: 60px;
+}
+
+.videodesc{
+	margin: 5px;
+	position: relative;
+    height: 15%;
+	color: white;
 }
 
 .module{
@@ -43,11 +59,16 @@ a:hover {
 }
 
 .modulehead{
+	display: table;
     background-color: rgba(0, 0, 0, 0.9); /*rgba(230, 33, 23, 0.9);*/
-    padding: 5px;
     font-weight: bolder;
     text-align: center;
+	font-family: Arial, sans-serif;
 	color: white;
+	padding: 5px;
+	height: 15%;
+	box-sizing: border-box;
+	width: 100%;
 }
 
 .modulebody{

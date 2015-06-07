@@ -2,6 +2,7 @@
 <title>YT Collections</title>
 <head>
 <script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+<script src="jquery.timeago.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="index.css">
 <script type="text/javascript">
 	<?php
@@ -54,7 +55,14 @@
 		["TheLalaTranceGirl", "UUMQBva6MUyidoNmcV8gIV9g"],
 		["DubstepGutter", "UUG6QEHCBfWZOnv7UVxappyw"],
 		["PenguinMusic", "UU0YSN3ge1paAcKMC_X3ktsw"],
-		["UnitedDubstep", "UUVrYrjXtAIgBbVN1i_FiGtw"]
+		["UnitedDubstep", "UUVrYrjXtAIgBbVN1i_FiGtw"],
+		["OneChilledPanda", "UUkUTBwZKwA9ojYqzj6VRlMQ"],
+		["SuicideSheeep", "UULTZddgA_La9H4Ngg99t_QQ"],
+		["TrapNation", "UUa10nxShhzNrCE1o2ZOPztg"],
+		["TrapGutter", "UUaJdK74vrx8Mk6HlwNk0uEQ"],
+		["KoalaKontrol", "UUBYg9_11ErMsFFNR66TRuLA"],
+		["JompaMusic", "UU1WKD9pJt5Sa4DCVaoJSAGw"],
+		["EpicMusicVN", "PL4adbQCQMmoZNMuDUsddQw4r9XWNdLbbI"]
 	];
 
 	$(document).ready(function(){
@@ -65,13 +73,47 @@
 		$.when.apply($, deferreds).then(allAjaxCallsDone);
 	});
 	
+	var cc = 0;
 	function allAjaxCallsDone(){
 		var body = $("body");
 		for (var i in ids) {
-			body.html(body.html() + "<div class='module' id='" + i + "'><div class='modulehead'><a href='https://www.youtube.com/watch?v=" + ids[i].id + "'>" + ids[i].channelTitle + " ~ " + ids[i].title + "</a></div><div class='modulebody'><img src='https://i.ytimg.com/vi/" + ids[i].id + "/mqdefault.jpg' class='videoimg'></div></div>");
+			body.html(body.html() + "<div class='module' id='" + i + "'><div class='modulehead'><div class='videotitle'><a href='https://www.youtube.com/watch?v=" + ids[i].id + "'>" + ids[i].title + "</a></div></div><div class='videoimg'><img src='https://i.ytimg.com/vi/" + ids[i].id + "/mqdefault.jpg' style='width: 100%'></div><div class='videodescimg' id='" + ids[i].channelId + cc + "'></div><div class='videodesc' id='" + ids[i].id + cc +"'>" + ids[i].channelTitle + "</div></div>");
+			getChannelIcon(ids[i].channelId, ids[i].channelId + cc);
+			getVideoInfo(ids[i].id, ids[i].id + cc);
+			cc++;
 		}
 	}
 
+	function getChannelIcon(str, resultId){
+		$.ajax({
+			url: "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" + str + "&key=<?php echo($key);?>",
+		})
+		.done(function(data) {
+			for (var key in data.items) {
+				var itemobj = data.items[key];
+				var iconUrl = itemobj["snippet"]["thumbnails"]["default"]["url"];
+				$("#" + resultId).html("<img src='" + iconUrl + "' width='46' style='float: left; margin: 2px'>" + $("#"+ resultId).html());
+			}
+			$("title").html(ids.length);
+		});
+	}
+	
+	function getVideoInfo(str, resultId){
+		$.ajax({
+			url: "https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=" + str + "&key=<?php echo($key);?>",
+		})
+		.done(function(data) {
+			for (var key in data.items) {
+				var itemobj = data.items[key];
+				var time = itemobj["snippet"]["publishedAt"];
+				var views = itemobj["statistics"]["viewCount"];
+				$("#" + resultId).html($("#"+ resultId).html() + "<br><abbr id='" + resultId +"timeago' class='timeago' title='" + time + "'>" + time + "</abbr><br>" + views + " views");
+				$("#" + resultId + "timeago").timeago();
+			}
+			$("title").html(ids.length);
+		});
+	}
+	
 	function getVideosFromPlaylistV3(str){
 		var call = $.ajax({
 			url: "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,snippet&maxResults=<?php echo($maxResults);?>&playlistId=" + str + "&key=<?php echo($key);?>",
