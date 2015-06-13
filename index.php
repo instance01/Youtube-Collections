@@ -62,7 +62,21 @@
 		["TrapGutter", "UUaJdK74vrx8Mk6HlwNk0uEQ"],
 		["KoalaKontrol", "UUBYg9_11ErMsFFNR66TRuLA"],
 		["JompaMusic", "UU1WKD9pJt5Sa4DCVaoJSAGw"],
-		["EpicMusicVN", "PL4adbQCQMmoZNMuDUsddQw4r9XWNdLbbI"]
+		["EpicMusicVN", "PL4adbQCQMmoZNMuDUsddQw4r9XWNdLbbI"],
+		["OrionMusicNetwork", "UUdy-3GIGZy2DD65TPg3i1GA"],
+		["InverseNetwork", "UUx5rscERi7IpVS9dO_HCl5A"],
+		["JED", "UUCCs8U1UsY-KlOePhSrMJdg"],
+		["NighTcoreFC", "UU5I3vUh2iNfQ3pCU3sodYRA"],
+		["DeadMusicFC", "UUBsKAivSo21NEubmxiLPUWw"],
+		["CrazyBass Promotions", "UU8uXrhG0n-i6as8V273Mknw"],
+		["BassOneMusic", "UUmyBcA6xsJDuKn_An6wL-EA"],
+		["EDMKobart", "UULTqXy_Y5G1nw5cBN21O_zw"],
+		["Lustcore", "UUrNlBy9CwV-sHGbRa6mf1GA"],
+		["KyraPromotions", "UUqolymr8zonJzC08v2wXNrQ"],
+		["RackiePromotions", "UUqPgPXkG6acQomkAewewcNQ"],
+		["NightcoreGalaxy", "PLHO3r5TU5dB9xtGsbOcwXVpkiPQiTZiDV"],
+		["NexusNetwork", "UUl4UOc8h1ZnO-inFPgAu7gw"],
+		["ReinaXmina", "UUwyU7wNCjTmcrRWws7ZTlXw"]
 	];
 
 	$(document).ready(function(){
@@ -77,7 +91,7 @@
 	function allAjaxCallsDone(){
 		var body = $("body");
 		for (var i in ids) {
-			body.html(body.html() + "<div class='module' id='" + i + "'><div class='modulehead'><div class='videotitle'><a href='https://www.youtube.com/watch?v=" + ids[i].id + "'>" + ids[i].title + "</a></div></div><div class='videoimg'><img src='https://i.ytimg.com/vi/" + ids[i].id + "/mqdefault.jpg' style='width: 100%'></div><div class='videodescimg' id='" + ids[i].channelId + cc + "'></div><div class='videodesc' id='" + ids[i].id + cc +"'>" + ids[i].channelTitle + "</div></div>");
+			body.html(body.html() + "<div class='module' id='" + i + "'><div class='modulehead'><div class='videotitle'><a href='https://www.youtube.com/watch?v=" + ids[i].id + "'>" + ids[i].title + "</a></div></div><div class='videoimg'><a href='https://www.youtube.com/watch?v=" + ids[i].id + "'><img src='https://i.ytimg.com/vi/" + ids[i].id + "/mqdefault.jpg' style='width: 100%'></a></div><div class='videodescimg' id='" + ids[i].channelId + cc + "'></div><div class='videodesc' id='" + ids[i].id + cc +"'>" + ids[i].channelTitle + "</div></div>");
 			getChannelIcon(ids[i].channelId, ids[i].channelId + cc);
 			getVideoInfo(ids[i].id, ids[i].id + cc);
 			cc++;
