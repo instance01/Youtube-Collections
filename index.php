@@ -7,7 +7,6 @@
 <script type="text/javascript">
 	<?php
 		include 'config.php';
-		$all_array = array();
 
 		$maxResults = 2; // max is 50
 
@@ -96,6 +95,9 @@
 			getVideoInfo(ids[i].id, ids[i].id + cc);
 			cc++;
 		}
+		$(".videodescimg").hover(function(e){
+			$(this).fadeOut(50).fadeIn(50).fadeOut(50).fadeIn(50);
+		}, function(e){});
 	}
 
 	function getChannelIcon(str, resultId){
@@ -106,9 +108,8 @@
 			for (var key in data.items) {
 				var itemobj = data.items[key];
 				var iconUrl = itemobj["snippet"]["thumbnails"]["default"]["url"];
-				$("#" + resultId).html("<img src='" + iconUrl + "' width='46' style='float: left; margin: 2px'>" + $("#"+ resultId).html());
+				$("#" + resultId).html("<a href='https://www.youtube.com/channel/" + str + "'><img src='" + iconUrl + "' width='46' style='float: left; margin: 2px'></a>" + $("#"+ resultId).html());
 			}
-			$("title").html(ids.length);
 		});
 	}
 	
@@ -124,7 +125,6 @@
 				$("#" + resultId).html($("#"+ resultId).html() + "<br><abbr id='" + resultId +"timeago' class='timeago' title='" + time + "'>" + time + "</abbr><br>" + views + " views");
 				$("#" + resultId + "timeago").timeago();
 			}
-			$("title").html(ids.length);
 		});
 	}
 	
