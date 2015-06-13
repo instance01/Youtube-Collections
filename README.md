@@ -1,5 +1,5 @@
 # Youtube-Collections
-Youtube Collections were removed, so I need a replacement. Can be adjusted to your needs rather easily by changing the channel names and playlist ids at line 25 (var channels = ..).
+Youtube Collections were removed, so I need a replacement. Can be adjusted to your needs rather easily by changing the channel names and playlist ids at [line 26 (var channels = ..)](https://github.com/instance01/Youtube-Collections/blob/master/index.php#L26).
 
 Example can be found [here](http://www.instancedev.com/yt_coll/). 
 
