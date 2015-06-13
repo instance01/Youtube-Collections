@@ -1,9 +1,9 @@
 <html>
 <title>YT Collections</title>
 <head>
+<link rel="stylesheet" type="text/css" href="index.css">
 <script type="text/javascript" src="jquery-2.1.1.min.js"></script>
 <script src="jquery.timeago.js" type="text/javascript"></script>
-<link rel="stylesheet" type="text/css" href="index.css">
 <script type="text/javascript">
 	<?php
 		include 'config.php';
@@ -21,6 +21,7 @@
 
 	var ids = [];
 	var debug = false;
+	var channelsDone = 0;
 
 	var channels = [
 		["LDM", "UUDl6xIISC4tm38lzmcHvDiQ"],
@@ -81,11 +82,11 @@
 	$(document).ready(function(){
 		var deferreds = [];
 		for (var i = 0; i < channels.length; i++) {
-			deferreds.push(getVideosFromPlaylistV3(channels[i][1]));
+			deferreds.push(getVideosFromPlaylistV3(channels[i][1], <?php echo($maxResults);?>));
 		}
 		$.when.apply($, deferreds).then(allAjaxCallsDone);
 	});
-	
+
 	var cc = 0;
 	function allAjaxCallsDone(){
 		var body = $("body");
@@ -98,11 +99,13 @@
 		$(".videodescimg").hover(function(e){
 			$(this).fadeOut(50).fadeIn(50).fadeOut(50).fadeIn(50);
 		}, function(e){});
+		$(".loadingInfo").remove();
 	}
 
 	function getChannelIcon(str, resultId){
 		$.ajax({
-			url: "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" + str + "&key=<?php echo($key);?>",
+			url: "requests.php?url=" + encodeURIComponent("https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" + str + "&key="),
+			dataType: "json"
 		})
 		.done(function(data) {
 			for (var key in data.items) {
@@ -112,10 +115,11 @@
 			}
 		});
 	}
-	
+
 	function getVideoInfo(str, resultId){
 		$.ajax({
-			url: "https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=" + str + "&key=<?php echo($key);?>",
+			url: "requests.php?url=" + encodeURIComponent("https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=" + str + "&key="),
+			dataType: "json"
 		})
 		.done(function(data) {
 			for (var key in data.items) {
@@ -127,10 +131,11 @@
 			}
 		});
 	}
-	
-	function getVideosFromPlaylistV3(str){
+
+	function getVideosFromPlaylistV3(str, maxResults){
 		var call = $.ajax({
-			url: "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,snippet&maxResults=<?php echo($maxResults);?>&playlistId=" + str + "&key=<?php echo($key);?>",
+			url: "requests.php?url=" + encodeURIComponent("https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,snippet&maxResults=" + maxResults + "&playlistId=" + str + "&key="),
+			dataType: "json"
 		})
 		.done(function(data) {
 			for (var key in data.items) {
@@ -145,6 +150,21 @@
 				var node = {title: videoTitle, id: videoId, channelTitle: channel, channelId: channelId};
 				ids.push(node);
 			}
+			// Circular loading bar
+			channelsDone += 1;
+			var rotation = 180 * channelsDone / channels.length;
+			var rotationFix = rotation * 2;
+			$('.circle .fill, .circle .mask.full').css("transform", 'rotate(' + rotation + 'deg)');
+			$('.circle .fill, .circle .mask.full').css("-webkit-transform", 'rotate(' + rotation + 'deg)');
+			$('.circle .fill, .circle .mask.full').css("-ms-transform", 'rotate(' + rotation + 'deg)');
+			$('.circle .fill, .circle .mask.full').css("-moz-transform", 'rotate(' + rotation + 'deg)');
+			$('.circle .fill.fix').css("transform", 'rotate(' + rotationFix + 'deg)');
+			$('.circle .fill.fix').css("-webkit-transform", 'rotate(' + rotationFix + 'deg)');
+			$('.circle .fill.fix').css("-ms-transform", 'rotate(' + rotationFix + 'deg)');
+			$('.circle .fill.fix').css("-moz-transform", 'rotate(' + rotationFix + 'deg)');
+
+			$('.progresscount').html(channelsDone + "/" + channels.length);
+
 			$("title").html(ids.length);
 		});
 		return call;
@@ -154,6 +174,22 @@
 <base target="_blank">
 </head>
 <body>
-	<!-- >.> -->
+	<div class="loadingInfo">
+		<div class="radial-progress">
+			<div class="circle">
+				<div class="mask full">
+					<div class="fill"></div>
+				</div>
+				<div class="mask half">
+					<div class="fill"></div>
+					<div class="fill fix"></div>
+				</div>
+				<div class="shadow"></div>
+			</div>
+			<div class="inset">
+			<div class="progresscount">0/?</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
